@@ -1,13 +1,21 @@
 package controller;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import model.*;
+import model.Rectangle;
 
 public class Controller {
 
@@ -40,6 +48,8 @@ public class Controller {
 
     private GeometricFigure currentFigure;
 
+    private boolean isLine;
+
     @FXML
     void initialize() {
         assert canvas != null : "fx:id=\"canvas\" was not injected: check your FXML file 'main.fxml'.";
@@ -50,7 +60,25 @@ public class Controller {
         assert lineButton != null : "fx:id=\"lineButton\" was not injected: check your FXML file 'main.fxml'.";
         assert listButton != null : "fx:id=\"listButton\" was not injected: check your FXML file 'main.fxml'.";
 
+        currentFigure = new Square();
+
         initList();
+
+        canvas.setOnMousePressed(mouseEvent -> {
+            System.out.println("Зажал");
+            currentFigure.setStartPoint(new Point((int) mouseEvent.getX(), (int) mouseEvent.getY()));
+        });
+
+        canvas.setOnMouseReleased(mouseEvent -> {
+            System.out.println("Отпустил");
+            currentFigure.setEndPoint(new Point((int) mouseEvent.getX(), (int) mouseEvent.getY()));
+
+            if (!isLine)
+                fixPoints(currentFigure);
+            GraphicsContext context = canvas.getGraphicsContext2D();
+            context.setFill(Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
+            currentFigure.draw(context);
+        });
 
     }
 
@@ -64,10 +92,53 @@ public class Controller {
     }
 
     private void initList() {
-        FigureList.getList().add(new Line(new Coordinates(50, 50), new Coordinates(600, 500)));
-        FigureList.getList().add(new Square(new Coordinates(100, 100), 100));
-        FigureList.getList().add(new Rectangle(new Coordinates(200, 200), 100, 200));
-        FigureList.getList().add(new Circle(new Coordinates(300, 300), 103));
-        FigureList.getList().add(new Ellipse(new Coordinates(400, 400), 50, 175));
+        FigureList.getList().add(new Line(new Point(0, 0), new Point(600, 500)));
+        FigureList.getList().add(new Square(new Point(50, 50), new Point(100, 100)));
+        FigureList.getList().add(new Rectangle(new Point(100, 100), new Point(200, 200)));
+        FigureList.getList().add(new Circle(new Point(200, 200), new Point(300, 300)));
+        FigureList.getList().add(new Ellipse(new Point(300, 300), new Point(350, 500)));
+    }
+
+    @FXML
+    private void handleLine() {
+        currentFigure = new Line();
+        isLine = true;
+    }
+
+    @FXML
+    private void handleSquare() {
+        currentFigure = new Square();
+        isLine = false;
+    }
+
+    @FXML
+    private void handleRectangle() {
+        currentFigure = new Rectangle();
+        isLine = false;
+    }
+
+    @FXML
+    private void handleCircle() {
+        currentFigure = new Circle();
+        isLine = false;
+    }
+
+    @FXML
+    private void handleEllipse() {
+        currentFigure = new Ellipse();
+        isLine = false;
+    }
+
+    private void fixPoints(GeometricFigure figure) {
+        if (figure.getEndPoint().y < figure.getStartPoint().y) {
+            int temp = figure.getEndPoint().y;
+            figure.getEndPoint().y = figure.getStartPoint().y;
+            figure.getStartPoint().y = temp;
+        }
+        if (figure.getEndPoint().x < figure.getStartPoint().x) {
+            int temp = figure.getEndPoint().x;
+            figure.getEndPoint().x = figure.getStartPoint().x;
+            figure.getStartPoint().x = temp;
+        }
     }
 }

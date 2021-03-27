@@ -6,6 +6,4 @@ public enum FigureType {
     ELLIPSE,
     SQUARE,
     RECTANGLE
-
-    
 }

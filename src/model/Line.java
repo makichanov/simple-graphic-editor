@@ -1,18 +1,20 @@
 package model;
 
 import javafx.scene.canvas.GraphicsContext;
+import java.awt.Point;
 
 public class Line extends GeometricFigure {
 
-    Coordinates finishPoint;
+    public Line(Point startPoint, Point endPoint) {
+        super(startPoint, endPoint);
+    }
 
-    public Line(Coordinates startPoint, Coordinates finishPoint) {
-        super(startPoint);
-        this.finishPoint = finishPoint;
+    public Line() {
     }
 
     @Override
     public void draw(GraphicsContext graphicsContext) {
-        graphicsContext.strokeLine(startPoint.getX(), startPoint.getY(), finishPoint.getX(), finishPoint.getY());
+
+        graphicsContext.strokeLine(startPoint.getX(), startPoint.getY(), endPoint.getX(), endPoint.getY());
     }
 }
