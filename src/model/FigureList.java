@@ -1,4 +1,6 @@
 package model;
+import model.geometrics.GeometricFigure;
+
 import java.util.ArrayList;
 import java.util.List;
 

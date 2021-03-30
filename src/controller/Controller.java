@@ -1,21 +1,17 @@
 package controller;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import model.*;
-import model.Rectangle;
+import model.FigureList;
+import model.geometrics.*;
+import model.geometrics.Rectangle;
 
 public class Controller {
 
@@ -65,12 +61,10 @@ public class Controller {
         initList();
 
         canvas.setOnMousePressed(mouseEvent -> {
-            System.out.println("Зажал");
             currentFigure.setStartPoint(new Point((int) mouseEvent.getX(), (int) mouseEvent.getY()));
         });
 
         canvas.setOnMouseReleased(mouseEvent -> {
-            System.out.println("Отпустил");
             currentFigure.setEndPoint(new Point((int) mouseEvent.getX(), (int) mouseEvent.getY()));
 
             if (!isLine)

@@ -1,4 +1,4 @@
-package model;
+package model.geometrics;
 
 import javafx.scene.canvas.GraphicsContext;
 import java.awt.Point;
